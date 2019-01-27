@@ -5,7 +5,13 @@ import json
 import re
 import html
 
-indir = '/u/cs401/A1/data/';
+if os.path.isdir('/u/cs401'):
+    data = '/u/cs401/A1/data/'
+    abbrev = /u/cs401/Wordlists/abbrev.english'
+else:
+    pwd = os.getcwd()
+    data = pwd+'/../data'
+    abbrev = pwd+'/../extras/abbrev.english'
 
 def preproc1( comment , steps=range(1,11)):
     ''' This function pre-processes a single comment
