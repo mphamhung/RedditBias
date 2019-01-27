@@ -2,6 +2,8 @@ import sys
 import argparse
 import os
 import json
+import re
+import html
 
 indir = '/u/cs401/A1/data/';
 
@@ -16,15 +18,38 @@ def preproc1( comment , steps=range(1,11)):
         modComm : string, the modified comment 
     '''
 
-    modComm = ''
+    modComm = comment
     if 1 in steps:
-        print('TODO')
+        # Remove new line characters
+        modComm = re.sub(r'\n', '', modComm)
+        print("Removed newline characters: ", modComm)
+
     if 2 in steps:
-        print('TODO')
+        # Replace HTML character codes
+        splitComm = modComm.split(' ')
+
+        for i in range(len(splitComm)):
+            splitComm[i] = html.unescape(splitComm[i])
+        modComm = ' '.join(splitComm)
+
+        print("Replaced HTML character codes: ", modComm)
+
     if 3 in steps:
-        print('TODO')
+        #Remove URLs
+        modComm = re.sub(r'[:/.(1-z)]*((www)|(https)|(.com))[:/.(1-z)]*', '', modComm) 
+        print("Removed URLS: ", modComm)
+
     if 4 in steps:
-        print('TODO')
+        #Make punctuation their own token
+        splitComm = modComm.split(' ')
+        punctuation = r'([!"#$%&()*+,\-/:;<=>?@\[\\\]^_`{|}~]+)'
+
+        Abbrvs = r'(?<!Mr|Mrs|Dr|Ms)\.'
+
+        modComm = re.sub(punctuation, r' \1', modComm) 
+        modComm = re.sub(Abbrvs, r' \1', modComm) 
+
+        print("Split Punctuation: ", modComm)
     if 5 in steps:
         print('TODO')
     if 6 in steps:
