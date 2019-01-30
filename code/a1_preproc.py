@@ -7,11 +7,13 @@ import html
 
 if os.path.isdir('/u/cs401'):
     data = '/u/cs401/A1/data/'
-    abbrev = /u/cs401/Wordlists/abbrev.english'
+    abbrev = '/u/cs401/Wordlists/abbrev.english'
+    clitics = '/u/cs401/Wordlists/clitics'
 else:
     pwd = os.getcwd()
     data = pwd+'/../data'
     abbrev = pwd+'/../extras/abbrev.english'
+    clitics = pwd+'/../extras/clitics'
 
 def preproc1( comment , steps=range(1,11)):
     ''' This function pre-processes a single comment
@@ -48,18 +50,48 @@ def preproc1( comment , steps=range(1,11)):
     if 4 in steps:
         #Make punctuation their own token
         splitComm = modComm.split(' ')
-        punctuation = r'([!"#$%&()*+,\-/:;<=>?@\[\\\]^_`{|}~]+)'
+        newComm = ''
 
-        Abbrvs = r'(?<!Mr|Mrs|Dr|Ms)\.'
-
-        modComm = re.sub(punctuation, r' \1', modComm) 
-        modComm = re.sub(Abbrvs, r' \1', modComm) 
-
+        with open(abbrev) as f:
+            listOfAbbrevs = [j.strip(' \n') for j in f.readlines()] + ['e.g.']
+            for token in splitComm:
+                if '.' in token:
+                    if token in listOfAbbrevs:
+                        newComm += " " + re.sub(r'([!"#$%&()*+,\-/:;<=>?@\[\\\]^_`{|}~]+)', r' \1', token) #No period
+                    else:
+                        newComm += " " + re.sub(r'([!"#$%&()*+,.\-/:;<=>?@\[\\\]^_`{|}~]+)', r' \1', token)
+                else:
+                    newComm += " " + re.sub(r'([!"#$%&()*+,\-/:;<=>?@\[\\\]^_`{|}~]+)', r' \1', token) #No period
+        modComm = newComm         
         print("Split Punctuation: ", modComm)
+
     if 5 in steps:
-        print('TODO')
+        #Split clitics
+
+        splitComm = modComm.split(' ')
+        newComm = ''
+
+        for token in splitComm:
+                if re.search(r'(n\'[\w]+)', token, flags=0):
+                    newComm += " " + re.sub(r'(n\'[\w]+)', r' \1', token) #covers can't won't
+                else:
+                    newComm += " " + re.sub(r'(\'[\w]*)', r' \1', token) #covers everything else
+        modComm = newComm         
+
+        print("Split Clitics: ", modComm)
+
     if 6 in steps:
-        print('TODO')
+        import spacy
+        nlp = spacy.load('en', disable=['parser', 'ner']) 
+
+        newComm = ''
+        utt = nlp(u'{}'.format(modComm))
+        for token in utt: 
+            print
+            newComm += " "+ token.text+'/'+str(token.tag_)
+        modComm = newComm         
+
+        print("Tagged tokens: ", modComm)
     if 7 in steps:
         print('TODO')
     if 8 in steps:
