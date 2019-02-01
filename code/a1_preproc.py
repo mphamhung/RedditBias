@@ -9,12 +9,13 @@ if os.path.isdir('/u/cs401'):
     data = '/u/cs401/A1/data/'
     abbrev = '/u/cs401/Wordlists/abbrev.english'
     clitics = '/u/cs401/Wordlists/clitics'
+    stopwords = '/u/cs401/Wordlists/StopWords'
 else:
     pwd = os.getcwd()
     data = pwd+'/../data'
     abbrev = pwd+'/../extras/abbrev.english'
     clitics = pwd+'/../extras/clitics'
-
+    stopwords = pwd+'/../extras/StopWords'
 def preproc1( comment , steps=range(1,11)):
     ''' This function pre-processes a single comment
 
@@ -31,6 +32,7 @@ def preproc1( comment , steps=range(1,11)):
         # Remove new line characters
         modComm = re.sub(r'\n', '', modComm)
         print("Removed newline characters: ", modComm)
+        modComm = re.sub(r'[ ]+', ' ', modComm)
 
     if 2 in steps:
         # Replace HTML character codes
@@ -85,7 +87,7 @@ def preproc1( comment , steps=range(1,11)):
         nlp = spacy.load('en', disable=['parser', 'ner']) 
 
         newComm = ''
-        utt = nlp(u'{}'.format(modComm))
+        utt = nlp(modComm)
         for token in utt: 
             print
             newComm += " "+ token.text+'/'+str(token.tag_)
@@ -93,11 +95,35 @@ def preproc1( comment , steps=range(1,11)):
 
         print("Tagged tokens: ", modComm)
     if 7 in steps:
-        print('TODO')
+        splitComm = modComm.split(' ')
+        newComm = ''
+        with open(stopwords) as f:
+            listOfStopwords = [j.strip(' \n') for j in f.readlines()]
+        for token in splitComm:
+            tmp = re.sub(r'/\w+', '', token)
+            if tmp in listOfStopwords:
+                continue
+            else:
+                newComm += " " + token
+        modComm = newComm
+        print("Removed Stop words: ", modComm)
+
     if 8 in steps:
-        print('TODO')
+        modComm = re.sub(r'/\w+', '', modComm)
+        import spacy
+        nlp = spacy.load('en', disable=['parser', 'ner']) 
+
+        newComm = ''
+        utt = nlp(modComm)
+        for token in utt: 
+            print
+            newComm += " "+ str(token.lemma_)+'/'+str(token.tag_)
+        modComm = newComm         
+
+        print("Applyed Lemmatization: ", modComm)
     if 9 in steps:
-        print('TODO')
+        modComm = re.sub(r'([!.?/]{2,})', r'\1 \n', modComm)
+        print("Added newline to end of Sentence: ", modComm)
     if 10 in steps:
         print('TODO')
         
