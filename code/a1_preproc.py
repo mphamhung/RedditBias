@@ -38,7 +38,7 @@ def preproc1( comment , steps=range(1,11)):
     if 1 in steps:
         # Remove new line characters
         modComm = re.sub(r'\n', '', modComm)
-        print("Removed newline characters: ", modComm)
+        # print("Removed newline characters: ", modComm)
         modComm = re.sub(r'[ ]+', ' ', modComm)
 
     if 2 in steps:
@@ -49,12 +49,12 @@ def preproc1( comment , steps=range(1,11)):
             splitComm[i] = html.unescape(splitComm[i])
         modComm = ' '.join(splitComm)
 
-        print("Replaced HTML character codes: ", modComm)
+        # print("Replaced HTML character codes: ", modComm)
 
     if 3 in steps:
         #Remove URLs
         modComm = re.sub(r'[:/.(1-z)]*((www)|(https)|(.com))[:/.(1-z)]*', '', modComm) 
-        print("Removed URLS: ", modComm)
+        # print("Removed URLS: ", modComm)
 
     if 4 in steps:
         #Make punctuation their own token
@@ -72,7 +72,7 @@ def preproc1( comment , steps=range(1,11)):
                 else:
                     newComm += " " + re.sub(r'([!"#$%&()*+,\-/:;<=>?@\[\\\]^_`{|}~]+)', r' \1', token) #No period
         modComm = newComm         
-        print("Split Punctuation: ", modComm)
+        # print("Split Punctuation: ", modComm)
 
     if 5 in steps:
         #Split clitics
@@ -87,7 +87,7 @@ def preproc1( comment , steps=range(1,11)):
                     newComm += " " + re.sub(r'(\'[\w]*)', r' \1', token) #covers everything else
         modComm = newComm         
 
-        print("Split Clitics: ", modComm)
+        # print("Split Clitics: ", modComm)
 
     if 6 in steps:
         newComm = ''
@@ -99,7 +99,7 @@ def preproc1( comment , steps=range(1,11)):
                 newComm += " "+ token.text+'/'+str(token.tag_)
         modComm = newComm         
 
-        print("Tagged tokens: ", modComm)
+        # print("Tagged tokens: ", modComm)
     if 7 in steps:
         splitComm = modComm.split(' ')
         newComm = ''
@@ -116,7 +116,7 @@ def preproc1( comment , steps=range(1,11)):
                 else:
                     newComm += " " + token
         modComm = newComm
-        print("Removed Stop words: ", modComm)
+        # print("Removed Stop words: ", modComm)
 
     if 8 in steps:
         modComm = re.sub(r'\/\S+', '', modComm)
@@ -136,14 +136,14 @@ def preproc1( comment , steps=range(1,11)):
                     newComm += " "+ str(token.lemma_)+'/'+str(token.tag_)
         modComm = newComm         
 
-        print("Applyed Lemmatization: ", modComm)
+        # print("Applyed Lemmatization: ", modComm)
     if 9 in steps:
         modComm = re.sub(r'(\/\.) ', r'\1\n', modComm)
 
-        print("Added newline to end of Sentence: ", modComm)
+        # print("Added newline to end of Sentence: ", modComm)
     if 10 in steps:
         modComm = re.sub(r'(\S+\/)', lambda x: x.group(1).lower() , modComm)
-        print("Lowercased the words: ", modComm)
+        # print("Lowercased the words: ", modComm)
 
     return modComm
 
