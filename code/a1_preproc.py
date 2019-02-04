@@ -5,6 +5,10 @@ import json
 import re
 import html
 
+import spacy
+nlp = spacy.load('en', disable=['parser', 'ner']) 
+
+
 if os.path.isdir('/u/cs401'):
     data = '/u/cs401/A1/data/'
     abbrev = '/u/cs401/Wordlists/abbrev.english'
@@ -83,9 +87,6 @@ def preproc1( comment , steps=range(1,11)):
         print("Split Clitics: ", modComm)
 
     if 6 in steps:
-        import spacy
-        nlp = spacy.load('en', disable=['parser', 'ner']) 
-
         newComm = ''
         utt = nlp(modComm)
         for token in utt: 
@@ -110,8 +111,6 @@ def preproc1( comment , steps=range(1,11)):
 
     if 8 in steps:
         modComm = re.sub(r'/\w+', '', modComm)
-        import spacy
-        nlp = spacy.load('en', disable=['parser', 'ner']) 
 
         newComm = ''
         utt = nlp(modComm)
