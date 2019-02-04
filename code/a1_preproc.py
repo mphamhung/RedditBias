@@ -8,6 +8,8 @@ import html
 import spacy
 nlp = spacy.load('en', disable=['parser', 'ner']) 
 
+indir = '/u/cs401/A1/data/'
+
 
 if os.path.isdir('/u/cs401'):
     data = '/u/cs401/A1/data/'
@@ -20,6 +22,7 @@ else:
     abbrev = pwd+'/../extras/abbrev.english'
     clitics = pwd+'/../extras/clitics'
     stopwords = pwd+'/../extras/StopWords'
+
 def preproc1( comment , steps=range(1,11)):
     ''' This function pre-processes a single comment
 
@@ -141,7 +144,7 @@ def preproc1( comment , steps=range(1,11)):
     if 10 in steps:
         modComm = re.sub(r'(\S+\/)', lambda x: x.group(1).lower() , modComm)
         print("Lowercased the words: ", modComm)
-        
+
     return modComm
 
 def main( args ):
@@ -155,8 +158,12 @@ def main( args ):
             data = json.load(open(fullFile))
 
             # TODO: select appropriate args.max lines
+            for line in data:
+                
             # TODO: read those lines with something like `j = json.loads(line)`
+                j = json.loads(line)
             # TODO: choose to retain fields from those lines that are relevant to you
+                
             # TODO: add a field to each selected line called 'cat' with the value of 'file' (e.g., 'Alt', 'Right', ...) 
             # TODO: process the body field (j['body']) with preproc1(...) using default for `steps` argument
             # TODO: replace the 'body' field with the processed text
