@@ -64,13 +64,18 @@ def preproc1( comment , steps=range(1,11)):
         with open(abbrev) as f:
             listOfAbbrevs = [j.strip(' \n') for j in f.readlines()] + ['e.g.']
             for token in splitComm:
+                if newComm == '':
+                    space = ""
+                else: 
+                    space = " "
+
                 if '.' in token:
                     if token in listOfAbbrevs:
-                        newComm += " " + re.sub(r'([!"#$%&()*+,\-/:;<=>?@\[\\\]^_`{|}~]+)', r' \1', token) #No period
+                        newComm += space + re.sub(r'([!"#$%&()*+,\-/:;<=>?@\[\\\]^_`{|}~]+)', r' \1', token) #No period
                     else:
-                        newComm += " " + re.sub(r'([!"#$%&()*+,.\-/:;<=>?@\[\\\]^_`{|}~]+)', r' \1', token)
+                        newComm += space + re.sub(r'([!"#$%&()*+,.\-/:;<=>?@\[\\\]^_`{|}~]+)', r' \1', token)
                 else:
-                    newComm += " " + re.sub(r'([!"#$%&()*+,\-/:;<=>?@\[\\\]^_`{|}~]+)', r' \1', token) #No period
+                    newComm += space + re.sub(r'([!"#$%&()*+,\-/:;<=>?@\[\\\]^_`{|}~]+)', r' \1', token) #No period
         modComm = newComm         
         # print("Split Punctuation: ", modComm)
 
@@ -81,10 +86,14 @@ def preproc1( comment , steps=range(1,11)):
         newComm = ''
 
         for token in splitComm:
+                if newComm == '':
+                    space = ""
+                else: 
+                    space = " "
                 if re.search(r'(n\'[\w]+)', token, flags=0):
-                    newComm += " " + re.sub(r'(n\'[\w]+)', r' \1', token) #covers can't won't
+                    newComm += space + re.sub(r'(n\'[\w]+)', r' \1', token) #covers can't won't
                 else:
-                    newComm += " " + re.sub(r'(\'[\w]*)', r' \1', token) #covers everything else
+                    newComm += space + re.sub(r'(\'[\w]*)', r' \1', token) #covers everything else
         modComm = newComm         
 
         # print("Split Clitics: ", modComm)
@@ -94,9 +103,12 @@ def preproc1( comment , steps=range(1,11)):
         utt = nlp(modComm)
         for token in utt: 
             if newComm == '':
-                newComm += token.text+'/'+str(token.tag_)
-            else:
-                newComm += " "+ token.text+'/'+str(token.tag_)
+                space = ""
+            else: 
+                space = " "
+            
+            newComm += space + token.text+'/'+str(token.tag_)
+
         modComm = newComm         
 
         # print("Tagged tokens: ", modComm)
@@ -111,10 +123,11 @@ def preproc1( comment , steps=range(1,11)):
                 continue
             else:
                 if newComm == '':
-                    newComm += token
+                    space = ""
+                else: 
+                    space = " "
 
-                else:
-                    newComm += " " + token
+                newComm += space + token
         modComm = newComm
         # print("Removed Stop words: ", modComm)
 
@@ -125,15 +138,13 @@ def preproc1( comment , steps=range(1,11)):
         utt = nlp(modComm)
         for token in utt: 
             if newComm == '':
-                    if str(token.lemma_)[0] == '-' and token.text[0] != '-':
-                        newComm += str(token.text)+'/'+str(token.tag_)
-                    else:
-                        newComm += str(token.lemma_)+'/'+str(token.tag_)
+                space = ""
+            else: 
+                space = " "
+            if str(token.lemma_)[0] == '-' and token.text[0] != '-':
+                newComm += space + str(token.text)+'/'+str(token.tag_)
             else:
-                if str(token.lemma_)[0] == '-' and token.text[0] != '-':
-                    newComm += " "+ str(token.text)+'/'+str(token.tag_)
-                else:
-                    newComm += " "+ str(token.lemma_)+'/'+str(token.tag_)
+                newComm += space + str(token.lemma_)+'/'+str(token.tag_)
         modComm = newComm         
 
         # print("Applyed Lemmatization: ", modComm)
