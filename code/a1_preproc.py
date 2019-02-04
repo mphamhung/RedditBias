@@ -164,6 +164,7 @@ def main( args ):
             # TODO: choose to retain fields from those lines that are relevant to you
                 relevent_fields = ['author', 'body', 'score', 'subreddit']
                 j = {x: j[x] for x in j if x in relevent_fields}
+                print(j)
             # TODO: add a field to each selected line called 'cat' with the value of 'file' (e.g., 'Alt', 'Right', ...)
                 j['cat'] = file
             # TODO: process the body field (j['body']) with preproc1(...) using default for `steps` argument
