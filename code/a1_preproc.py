@@ -159,16 +159,19 @@ def main( args ):
 
             # TODO: select appropriate args.max lines
             for line in data:
-                print(line)
             # TODO: read those lines with something like `j = json.loads(line)`
                 j = json.loads(line)
             # TODO: choose to retain fields from those lines that are relevant to you
-                
-            # TODO: add a field to each selected line called 'cat' with the value of 'file' (e.g., 'Alt', 'Right', ...) 
+                relevent_fields = ['author', 'body', 'score', 'subreddit']
+                j = {x: j[x] for x in j if x in relevent_fields}
+            # TODO: add a field to each selected line called 'cat' with the value of 'file' (e.g., 'Alt', 'Right', ...)
+                j['cat'] = file
             # TODO: process the body field (j['body']) with preproc1(...) using default for `steps` argument
             # TODO: replace the 'body' field with the processed text
+                j['body'] = preproc1(j['body'])
+                print(j)
             # TODO: append the result to 'allOutput'
-            
+            allOutput.append(j)
     fout = open(args.output, 'w')
     fout.write(json.dumps(allOutput))
     fout.close()
