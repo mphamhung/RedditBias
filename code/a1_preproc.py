@@ -159,7 +159,7 @@ def preproc1( comment , steps=range(1,11)):
     return modComm
 
 def main( args ):
-
+    print(args)
     allOutput = []
     for subdir, dirs, files in os.walk(indir):
         for file in files:
@@ -169,7 +169,9 @@ def main( args ):
             data = json.load(open(fullFile))
 
             # TODO: select appropriate args.max lines
-            for line in data:
+            for num, line in enumerate(data):
+                if num > args.max:
+                    break
             # TODO: read those lines with something like `j = json.loads(line)`
                 j = json.loads(line)
             # TODO: choose to retain fields from those lines that are relevant to you
