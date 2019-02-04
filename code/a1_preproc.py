@@ -159,7 +159,7 @@ def main( args ):
 
             # TODO: select appropriate args.max lines
             for line in data:
-                
+                print(line)
             # TODO: read those lines with something like `j = json.loads(line)`
                 j = json.loads(line)
             # TODO: choose to retain fields from those lines that are relevant to you
