@@ -1,8 +1,12 @@
 from a1_preproc import preproc1
 
-testComment = "hello sir, my name is john. wtf are u saying to me? Mr. Banks, please."
+testComment = "No, i'm not a ts, i'm just a gay male who likes to look good. I don't mind buying covergirl, it works.  Thats all i care about."
+
 print(testComment)
-out = preproc1( testComment, steps = range(11))
-print(out)
+
+for i in range(11):
+    print(i)
+    testComment = preproc1( testComment, steps = [i])
+    print(testComment)
 
 
