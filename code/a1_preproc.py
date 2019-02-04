@@ -90,8 +90,10 @@ def preproc1( comment , steps=range(1,11)):
         newComm = ''
         utt = nlp(modComm)
         for token in utt: 
-            print
-            newComm += " "+ token.text+'/'+str(token.tag_)
+            if newComm == '':
+                newComm += token.text+'/'+str(token.tag_)
+            else:
+                newComm += " "+ token.text+'/'+str(token.tag_)
         modComm = newComm         
 
         print("Tagged tokens: ", modComm)
@@ -101,30 +103,44 @@ def preproc1( comment , steps=range(1,11)):
         with open(stopwords) as f:
             listOfStopwords = [j.strip(' \n') for j in f.readlines()]
         for token in splitComm:
-            tmp = re.sub(r'/\w+', '', token)
+            tmp = re.sub(r'\/\S+', '', token)
             if tmp in listOfStopwords:
                 continue
             else:
-                newComm += " " + token
+                if newComm == '':
+                    newComm += token
+
+                else:
+                    newComm += " " + token
         modComm = newComm
         print("Removed Stop words: ", modComm)
 
     if 8 in steps:
-        modComm = re.sub(r'/\w+', '', modComm)
+        modComm = re.sub(r'\/\S+', '', modComm)
 
         newComm = ''
         utt = nlp(modComm)
         for token in utt: 
-            print
-            newComm += " "+ str(token.lemma_)+'/'+str(token.tag_)
+            if newComm == '':
+                    if str(token.lemma_)[0] == '-' and token.text[0] != '-':
+                        newComm += str(token.text)+'/'+str(token.tag_)
+                    else:
+                        newComm += str(token.lemma_)+'/'+str(token.tag_)
+            else:
+                if str(token.lemma_)[0] == '-' and token.text[0] != '-':
+                    newComm += " "+ str(token.text)+'/'+str(token.tag_)
+                else:
+                    newComm += " "+ str(token.lemma_)+'/'+str(token.tag_)
         modComm = newComm         
 
         print("Applyed Lemmatization: ", modComm)
     if 9 in steps:
-        modComm = re.sub(r'([!.?/]{2,})', r'\1 \n', modComm)
+        modComm = re.sub(r'(\/\.) ', r'\1\n', modComm)
+
         print("Added newline to end of Sentence: ", modComm)
     if 10 in steps:
-        print('TODO')
+        modComm = re.sub(r'(\S+\/)', lambda x: x.group(1).lower() , modComm)
+        print("Lowercased the words: ", modComm)
         
     return modComm
 
