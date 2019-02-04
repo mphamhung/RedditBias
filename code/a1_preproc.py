@@ -159,7 +159,6 @@ def preproc1( comment , steps=range(1,11)):
     return modComm
 
 def main( args ):
-    print(args)
     allOutput = []
     for subdir, dirs, files in os.walk(indir):
         for file in files:
@@ -170,7 +169,7 @@ def main( args ):
 
             # TODO: select appropriate args.max lines
             for num, line in enumerate(data):
-                if num > args.max:
+                if num > int(args.max):
                     break
             # TODO: read those lines with something like `j = json.loads(line)`
                 j = json.loads(line)
@@ -199,7 +198,7 @@ if __name__ == "__main__":
     parser.add_argument("--max", help="The maximum number of comments to read from each file", default=10000)
     args = parser.parse_args()
 
-    if (args.max > 200272):
+    if (int(args.max) > 200272):
         print( "Error: If you want to read more than 200,272 comments per file, you have to read them all." )
         sys.exit(1)
         
