@@ -5,6 +5,7 @@ import os
 import json
 
 import re
+import csv
 
 if os.path.isdir('/u/cs401'):
     prefix = '/u/cs401/Wordlists/'
@@ -19,6 +20,14 @@ firstperson = prefix + 'First-person'
 secondperson = prefix + 'Second-person'
 thirdperson = prefix + 'Third-Person'
 slang = prefix + 'Slang'
+
+BNGL = {}
+with open(prefix+'BristolNorms+GilhoolyLogie.csv', newline ='') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        BNGL[row['WORD']] = {"AoA": row['AoA (100-700)'], "IMG": row['IMG'], "FAM": row['FAM']}
+
+print(BNGL)
 
 with open(firstperson) as f:
     firstpersonPat = re.sub('\n', '', r' (('+ r')|('.join(f.readlines()) + r'))\/')
@@ -91,8 +100,10 @@ def extract1( comment ):
     feats[13] += len(re.findall(r' ([A-Z]{3,})\/', comment)) #find all capped words >= 3 letters long
     feats[14] += (len(re.findall(r' ', comment)) + 1)/float(len(re.findall(r'/.', comment))) # avg number of tokens per sentence
     feats[15] += (len(''.join(re.findall(r'\b[0-z]+\/', comment))) - 1)/float(len(re.findall(r'\b[0-z]+\/', comment))) #avg len of tokens
-    feats[16] += len(re.findall(r'/.', comment))
+    feats[16] += len(re.findall(r'/.', comment)) #Number of sentences
+
     
+
 
     # TODO: your code here
 
