@@ -12,7 +12,7 @@ if os.path.isdir('/u/cs401'):
 
 else:
     pwd = os.getcwd()
-    prefix = pwd + '../extras/Wordlists/'
+    prefix = pwd + '/../extras/Wordlists/'
     data = pwd+'/../data'
 
 firstperson = prefix + 'First-person'
@@ -21,7 +21,7 @@ thirdperson = prefix + 'Third-Person'
 slang = prefix + 'Slang'
 
 with open(firstperson) as f:
-    firstpersonPat = r'(('+ r')|('.join(f.split("\n")) + r'))\/'
+    firstpersonPat = re.sub('\n', '', r'(('+ r')|('.join(f.readlines()) + r'))\/')
     print(firstpersonPat)
 
     
