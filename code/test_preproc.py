@@ -1,6 +1,6 @@
 from a1_preproc import preproc1
 
-testComment = "No, i'm not a ts, i'm just a gay male who likes to look good. I don't mind buying covergirl, it works.  Thats all i care about."
+testComment = 'first_pn = ["i","me","my","mine","we","us","our","ours"] second_pn = ["you", "your", "yours", "u", "ur", "urs"] third_pn = ["he", "him", "his", "she", "her", "hers", "it", "its", "they", "them", "their", "theirs"] future_v = ["ll", "gonna"].'
 
 print(testComment)
 
