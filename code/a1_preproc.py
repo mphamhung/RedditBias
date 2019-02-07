@@ -19,9 +19,9 @@ if os.path.isdir('/u/cs401'):
 else:
     pwd = os.getcwd()
     data = pwd+'/../data'
-    abbrev = pwd+'/../extras/abbrev.english'
-    clitics = pwd+'/../extras/clitics'
-    stopwords = pwd+'/../extras/StopWords'
+    abbrev = pwd+'/../extras/Wordlists/abbrev.english'
+    clitics = pwd+'/../extras/Wordlists/clitics'
+    stopwords = pwd+'/../extras/Wordlists/StopWords'
 
 def preproc1( comment , steps=range(1,11)):
     ''' This function pre-processes a single comment
