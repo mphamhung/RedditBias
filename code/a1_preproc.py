@@ -159,6 +159,8 @@ def preproc1( comment , steps=range(1,11)):
     return modComm
 
 def main( args ):
+    print(args.ID)
+    print(args.max)
     allOutput = []
     for subdir, dirs, files in os.walk(indir):
         for file in files:
@@ -167,6 +169,7 @@ def main( args ):
 
             data = json.load(open(fullFile))
 
+            
             # TODO: select appropriate args.max lines
             for i in range(int(args.ID)%int(args.max),int(args.ID)%int(args.max) + int(args.max))
                 line = data[i]
