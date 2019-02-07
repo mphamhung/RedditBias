@@ -90,8 +90,10 @@ def extract1( comment ):
     feats[12] += len(re.findall(slangPat, comment)) #find slang acronyms
     feats[13] += len(re.findall(r' ([A-Z]{3,})\/', comment)) #find all capped words >= 3 letters long
     feats[14] += (len(re.findall(r' ', comment)) + 1)/float(len(re.findall(r'/.', comment))) # avg number of tokens per sentence
-    feats[15] += (len(re.findall(r'\w+\/', comment)) + 1)/float(len(re.findall(r'/.', comment)))
+    feats[15] += (len(''.join(re.findall(r'\b[0-z]+\/', comment))) - 1)/float(len(re.findall(r'\b[0-z]+\/', comment))) #avg len of tokens
     feats[16] += len(re.findall(r'/.', comment))
+    
+
     # TODO: your code here
 
 def main( args ):

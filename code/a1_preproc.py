@@ -168,9 +168,8 @@ def main( args ):
             data = json.load(open(fullFile))
 
             # TODO: select appropriate args.max lines
-            for num, line in enumerate(data):
-                if num > int(args.max):
-                    break
+            for i in range(int(args.ID)%int(args.max),int(args.ID)%int(args.max) + int(args.max))
+                line = data[i]
             # TODO: read those lines with something like `j = json.loads(line)`
                 j = json.loads(line)
             # TODO: choose to retain fields from those lines that are relevant to you
