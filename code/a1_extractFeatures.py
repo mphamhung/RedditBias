@@ -62,7 +62,17 @@ def extract1( comment ):
     17. Number of sentences. 
     18. Average of AoA (100-700) from Bristol, Gilhooly, and Logie norms 
     19. Average of IMG from Bristol, Gilhooly, and Logie norms 
-    20. Average of FAM from Bristol, Gilhooly, and Logie norms 21. Standard deviation of AoA (100-700) from Bristol, Gilhooly, and Logie norms 22. Standard deviation of IMG from Bristol, Gilhooly, and Logie norms 23. Standard deviation of FAM from Bristol, Gilhooly, and Logie norms 24. Average of V.Mean.Sum from Warringer norms 25. Average of A.Mean.Sum from Warringer norms 26. Average of D.Mean.Sum from Warringer norms 27. Standard deviation of V.Mean.Sum from Warringer norms 28. Standard deviation of A.Mean.Sum from Warringer norms 29. Standard deviation of D.Mean.Sum from Warringer norms '''
+    20. Average of FAM from Bristol, Gilhooly, and Logie norms 
+    21. Standard deviation of AoA (100-700) from Bristol, Gilhooly, and Logie norms 
+    22. Standard deviation of IMG from Bristol, Gilhooly, and Logie norms 
+    23. Standard deviation of FAM from Bristol, Gilhooly, and Logie norms 
+    24. Average of V.Mean.Sum from Warringer norms 
+    25. Average of A.Mean.Sum from Warringer norms 
+    26. Average of D.Mean.Sum from Warringer norms 
+    27. Standard deviation of V.Mean.Sum from Warringer norms 
+    28. Standard deviation of A.Mean.Sum from Warringer norms 
+    29. Standard deviation of D.Mean.Sum from Warringer norms 
+    '''
     feats = np.zeros(173)
 
     feats[0] += len(re.findall(firstpersonPat, comment)) #Number of first person pronouns
