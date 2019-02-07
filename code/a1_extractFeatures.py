@@ -25,13 +25,13 @@ BNGL = {}
 with open(prefix+'BristolNorms+GilhoolyLogie.csv', newline ='') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
-        BNGL[row['WORD']] = {"AoA": row['AoA (100-700)'], "IMG": row['IMG'], "FAM": row['FAM']}
+        BNGL[row['WORD']] = {"AoA": int(row['AoA (100-700)']), "IMG": int(row['IMG']), "FAM": int(row['FAM'])}
 
 Warr = {}
 with open(prefix+'Ratings_Warriner_et_al.csv', newline ='') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
-        Warr[row['Word']] = {"V.Mean.Sum": row['V.Mean.Sum'], "A.Mean.Sum": row['A.Mean.Sum'], "D.Mean.Sum": row['D.Mean.Sum']}
+        Warr[row['Word']] = {"V.Mean.Sum":int(row['V.Mean.Sum']), "A.Mean.Sum": int(row['A.Mean.Sum']), "D.Mean.Sum": int(row['D.Mean.Sum'])}
 
 with open(firstperson) as f:
     firstpersonPat = re.sub('\n', '', r' (('+ r')|('.join(f.readlines()) + r'))\/')
@@ -86,7 +86,7 @@ def extract1( comment ):
     28. Standard deviation of A.Mean.Sum from Warringer norms 
     29. Standard deviation of D.Mean.Sum from Warringer norms 
     '''
-    feats = np.zeros(173)
+    feats = np.zeros(173+1)
 
     feats[0] += len(re.findall(firstpersonPat, comment)) #Number of first person pronouns
     feats[1] += len(re.findall(secondpersonPat, comment)) #Number of second person pronouns
@@ -106,17 +106,50 @@ def extract1( comment ):
     feats[15] += (len(''.join(re.findall(r'\b[0-z]+\/', comment))) - 1)/float(len(re.findall(r'\b[0-z]+\/', comment))) #avg len of tokens
     feats[16] += len(re.findall(r'/.', comment)) #Number of sentences
 
-    
+    words = [word.strip('/') for word in re.findall(r'\w+\/', comment)]
+    feats[17] = sum([BNGL[word]['AoA'] for word in words if word in BNGL.keys()])/len(words)
+    feats[18] = sum([BNGL[word]['IMG'] for word in words if word in BNGL.keys()])/len(words)
+    feats[19] = sum([BNGL[word]['FAM'] for word in words if word in BNGL.keys()])/len(words)
 
+    feats[20] = math.sqrt(sum([(BNGL[word]['AoA'] - feats[17])^2 for word in words if word in BNGL.keys()])/len(words))
+    feats[21] = math.sqrt(sum([(BNGL[word]['IMG'] - feats[18])^2  for word in words if word in BNGL.keys()])/len(words))
+    feats[22] = math.sqrt(sum([(BNGL[word]['FAM'] - feats[19])^2  for word in words if word in BNGL.keys()])/len(words))
+    
+    feats[23] = sum([Warr[word]['V.Mean.Sum'] for word in words if word in Warr.keys()])/len(words)
+    feats[24] = sum([Warr[word]['A.Mean.Sum'] for word in words if word in Warr.keys()])/len(words)
+    feats[25] = sum([Warr[word]['D.Mean.Sum'] for word in words if word in Warr.keys()])/len(words)
+
+    feats[26] = math.sqrt(sum([(Warr[word]['V.Mean.Sum'] - feats[17])^2 for word in words if word in Warr.keys()])/len(words))
+    feats[27] = math.sqrt(sum([(Warr[word]['A.Mean.Sum'] - feats[18])^2  for word in words if word in Warr.keys()])/len(words))
+    feats[28] = math.sqrt(sum([(Warr[word]['D.Mean.Sum'] - feats[19])^2  for word in words if word in Warr.keys()])/len(words))  
 
     # TODO: your code here
-
+    return feats
+    feats
 def main( args ):
 
     data = json.load(open(args.input))
     feats = np.zeros( (len(data), 173+1))
 
     # TODO: your code here
+    for i in range(len(data)):
+    if (i % 100 == 0):
+        print("complete: "+ str(i/float(len(data))*100) + "%")
+        feats[i][:29] = extract1(data[i]["body"])
+
+
+        
+
+
+
+        if (data[i]["cat"] == "Alt"):
+            feats[i][-1] = 3
+        elif (data[i]["cat"] == "Center"):
+            feats[i][-1] = 1
+        elif (data[i]["cat"] == "Left"):
+            feats[i][-1] = 0
+        elif (data[i]["cat"] == "Right"):
+            feats[i][-1] = 2
 
     np.savez_compressed( args.output, feats)
 
