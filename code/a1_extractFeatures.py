@@ -27,7 +27,11 @@ with open(prefix+'BristolNorms+GilhoolyLogie.csv', newline ='') as csvfile:
     for row in reader:
         BNGL[row['WORD']] = {"AoA": row['AoA (100-700)'], "IMG": row['IMG'], "FAM": row['FAM']}
 
-print(BNGL)
+Warr = {}
+with open(prefix+'Ratings_Warriner_et_al.csv', newline ='') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        Warr[row['Word']] = {"V.Mean.Sum": row['V.Mean.Sum'], "A.Mean.Sum": row['A.Mean.Sum'], "D.Mean.Sum": row['D.Mean.Sum']}
 
 with open(firstperson) as f:
     firstpersonPat = re.sub('\n', '', r' (('+ r')|('.join(f.readlines()) + r'))\/')
