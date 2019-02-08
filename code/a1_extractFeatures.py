@@ -6,7 +6,7 @@ import json
 
 import re
 import csv
-
+import math
 if os.path.isdir('/u/cs401'):
     prefix = '/u/cs401/Wordlists/'
     data = '/u/cs401/A1/data/'
