@@ -51,14 +51,16 @@ with open(prefix+'Ratings_Warriner_et_al.csv', newline ='') as csvfile:
 
 if featpfx:
     cats = ['Alt', 'Center', 'Left', 'Right']
+    ID = {}
+    featArr = {}
     for cat in cats:
         ID[cat] = {}
-        feats[cat] = np.load(featpfx+cat+'_feats.dat.npy')
+        featArr[cat] = np.load(featpfx+cat+'_feats.dat.npy')
         with open(featpfx+cat+'_IDs.txt') as f:
-            for index, id in f.readlines():
+            for index, id in enumerate(f.readlines()):
                 ID[cat][id] = index
 
-    print(ID, feats)
+    print(ID, featArr)
 def extract1( comment ):
     ''' This function extracts features from a single comment
 
