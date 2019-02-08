@@ -19,7 +19,7 @@ else:
 
 firstperson = prefix + 'First-person'
 secondperson = prefix + 'Second-person'
-thirdperson = prefix + 'Third-Person'
+thirdperson = prefix + 'Third-person'
 slang = prefix + 'Slang'
 
 with open(firstperson) as f:
@@ -144,8 +144,6 @@ def main( args ):
 
     # TODO: your code here
     for i in range(len(data)):
-    if (i % 100 == 0):
-        print("complete: "+ str(i/float(len(data))*100) + "%")
         feats[i][:29] = extract1(data[i]["body"])
 
         id = data[i]['id']
