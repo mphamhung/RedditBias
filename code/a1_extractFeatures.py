@@ -39,12 +39,14 @@ BNGL = {}
 with open(prefix+'BristolNorms+GilhoolyLogie.csv', newline ='') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
-        BNGL[row['WORD']] = {"AoA": int(row['AoA (100-700)']), "IMG": int(row['IMG']), "FAM": int(row['FAM'])}
+        if row['WORD']:
+            BNGL[row['WORD']] = {"AoA": int(row['AoA (100-700)']), "IMG": int(row['IMG']), "FAM": int(row['FAM'])}
 
 Warr = {}
 with open(prefix+'Ratings_Warriner_et_al.csv', newline ='') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
+
         Warr[row['Word']] = {"V.Mean.Sum":float(row['V.Mean.Sum']), "A.Mean.Sum": float(row['A.Mean.Sum']), "D.Mean.Sum": float(row['D.Mean.Sum'])}
 
 if featpfx:
@@ -56,7 +58,7 @@ if featpfx:
             for index, id in f.readlines():
                 ID[cat][id] = index
 
-print(ID, feats)
+    print(ID, feats)
 def extract1( comment ):
     ''' This function extracts features from a single comment
 
