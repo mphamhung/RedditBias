@@ -147,9 +147,9 @@ def main( args ):
 
     # TODO: your code here
     for i in range(len(data)):
-        feats[i][:29] = extract1(data[i]["body"])
+        feats[i][:29] = extract1(data[i]["body"]) #load extracted feats
         id = data[i]['id']
-        feats[i][29:-1] = featArr[data[i]['cat']][ID[data[i]['cat']][id]]
+        feats[i][29:-1] = featArr[data[i]['cat']][ID[data[i]['cat']][id]] #load Receptiviti feats
         if (data[i]["cat"] == "Alt"):
             feats[i][-1] = 3
         elif (data[i]["cat"] == "Center"):
