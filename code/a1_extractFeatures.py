@@ -31,7 +31,7 @@ Warr = {}
 with open(prefix+'Ratings_Warriner_et_al.csv', newline ='') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
-        Warr[row['Word']] = {"V.Mean.Sum":int(row['V.Mean.Sum']), "A.Mean.Sum": int(row['A.Mean.Sum']), "D.Mean.Sum": int(row['D.Mean.Sum'])}
+        Warr[row['Word']] = {"V.Mean.Sum":float(row['V.Mean.Sum']), "A.Mean.Sum": float(row['A.Mean.Sum']), "D.Mean.Sum": float(row['D.Mean.Sum'])}
 
 with open(firstperson) as f:
     firstpersonPat = re.sub('\n', '', r' (('+ r')|('.join(f.readlines()) + r'))\/')
