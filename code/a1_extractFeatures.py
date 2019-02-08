@@ -60,7 +60,6 @@ if featpfx:
             for index, id in enumerate(f.readlines()):
                 ID[cat][id] = index
 
-    print(ID, featArr)
 def extract1( comment ):
     ''' This function extracts features from a single comment
 
@@ -149,9 +148,8 @@ def main( args ):
     # TODO: your code here
     for i in range(len(data)):
         feats[i][:29] = extract1(data[i]["body"])
-
         id = data[i]['id']
-
+        feats[i][29:-1] = featsArr[data[i]['cat']][ID[id]]
         if (data[i]["cat"] == "Alt"):
             feats[i][-1] = 3
         elif (data[i]["cat"] == "Center"):
@@ -165,13 +163,13 @@ def main( args ):
     np.savez_compressed( args.output, feats)
 
     
-# if __name__ == "__main__": 
+if __name__ == "__main__": 
 
-#     parser = argparse.ArgumentParser(description='Process each .')
-#     parser.add_argument("-o", "--output", help="Directs the output to a filename of your choice", required=True)
-#     parser.add_argument("-i", "--input", help="The input JSON file, preprocessed as in Task 1", required=True)
-#     args = parser.parse_args()
+    parser = argparse.ArgumentParser(description='Process each .')
+    parser.add_argument("-o", "--output", help="Directs the output to a filename of your choice", required=True)
+    parser.add_argument("-i", "--input", help="The input JSON file, preprocessed as in Task 1", required=True)
+    args = parser.parse_args()
                  
 
-#     main(args)
+    main(args)
 
