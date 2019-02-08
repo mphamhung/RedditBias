@@ -149,7 +149,7 @@ def main( args ):
     for i in range(len(data)):
         feats[i][:29] = extract1(data[i]["body"])
         id = data[i]['id']
-        feats[i][29:-1] = featsArr[data[i]['cat']][ID[id]]
+        feats[i][29:-1] = featArr[data[i]['cat']][ID[id]]
         if (data[i]["cat"] == "Alt"):
             feats[i][-1] = 3
         elif (data[i]["cat"] == "Center"):
