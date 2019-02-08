@@ -10,28 +10,17 @@ import csv
 if os.path.isdir('/u/cs401'):
     prefix = '/u/cs401/Wordlists/'
     data = '/u/cs401/A1/data/'
-
+    featpfx = '/u/cs401/A1/feats/'
 else:
     pwd = os.getcwd()
     prefix = pwd + '/../extras/Wordlists/'
     data = pwd+'/../data'
+    featpfx = ''
 
 firstperson = prefix + 'First-person'
 secondperson = prefix + 'Second-person'
 thirdperson = prefix + 'Third-Person'
 slang = prefix + 'Slang'
-
-BNGL = {}
-with open(prefix+'BristolNorms+GilhoolyLogie.csv', newline ='') as csvfile:
-    reader = csv.DictReader(csvfile)
-    for row in reader:
-        BNGL[row['WORD']] = {"AoA": int(row['AoA (100-700)']), "IMG": int(row['IMG']), "FAM": int(row['FAM'])}
-
-Warr = {}
-with open(prefix+'Ratings_Warriner_et_al.csv', newline ='') as csvfile:
-    reader = csv.DictReader(csvfile)
-    for row in reader:
-        Warr[row['Word']] = {"V.Mean.Sum":float(row['V.Mean.Sum']), "A.Mean.Sum": float(row['A.Mean.Sum']), "D.Mean.Sum": float(row['D.Mean.Sum'])}
 
 with open(firstperson) as f:
     firstpersonPat = re.sub('\n', '', r' (('+ r')|('.join(f.readlines()) + r'))\/')
@@ -45,6 +34,29 @@ with open(thirdperson) as f:
 with open(slang) as f:
     slangPat = re.sub('\n', '', r' (('+ r')|('.join(f.readlines()) + r'))\/')
     
+
+BNGL = {}
+with open(prefix+'BristolNorms+GilhoolyLogie.csv', newline ='') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        BNGL[row['WORD']] = {"AoA": int(row['AoA (100-700)']), "IMG": int(row['IMG']), "FAM": int(row['FAM'])}
+
+Warr = {}
+with open(prefix+'Ratings_Warriner_et_al.csv', newline ='') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        Warr[row['Word']] = {"V.Mean.Sum":float(row['V.Mean.Sum']), "A.Mean.Sum": float(row['A.Mean.Sum']), "D.Mean.Sum": float(row['D.Mean.Sum'])}
+
+if featpfx:
+    cats = ['Alt', 'Center', 'Left', 'Right']
+    for cat in cats:
+        ID[cat] = {}
+        feats[cat] = np.load(featpfx+cat+'_feats.dat.npy')
+        with open(featpfx+cat+'_IDs.txt') as f:
+            for index, id in f.readlines():
+                ID[cat][id] = index
+
+print(ID, feats)
 def extract1( comment ):
     ''' This function extracts features from a single comment
 
@@ -125,7 +137,6 @@ def extract1( comment ):
 
     # TODO: your code here
     return feats
-    feats
 def main( args ):
 
     data = json.load(open(args.input))
@@ -137,10 +148,7 @@ def main( args ):
         print("complete: "+ str(i/float(len(data))*100) + "%")
         feats[i][:29] = extract1(data[i]["body"])
 
-
-        
-
-
+        id = data[i]['id']
 
         if (data[i]["cat"] == "Alt"):
             feats[i][-1] = 3
@@ -150,6 +158,7 @@ def main( args ):
             feats[i][-1] = 0
         elif (data[i]["cat"] == "Right"):
             feats[i][-1] = 2
+        
 
     np.savez_compressed( args.output, feats)
 
