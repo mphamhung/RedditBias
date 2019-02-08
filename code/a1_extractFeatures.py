@@ -58,7 +58,7 @@ if featpfx:
         featArr[cat] = np.load(featpfx+cat+'_feats.dat.npy')
         with open(featpfx+cat+'_IDs.txt') as f:
             for index, id in enumerate(f.readlines()):
-                ID[cat][id] = index
+                ID[cat][id.strip('\n')] = index
 
 def extract1( comment ):
     ''' This function extracts features from a single comment
@@ -149,7 +149,7 @@ def main( args ):
     for i in range(len(data)):
         feats[i][:29] = extract1(data[i]["body"])
         id = data[i]['id']
-        feats[i][29:-1] = featArr[data[i]['cat']][ID[id]]
+        feats[i][29:-1] = featArr[data[i]['cat']][ID[data[i]['cat']][id]]
         if (data[i]["cat"] == "Alt"):
             feats[i][-1] = 3
         elif (data[i]["cat"] == "Center"):
