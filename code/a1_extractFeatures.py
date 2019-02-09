@@ -117,27 +117,41 @@ def extract1( comment ):
     feats[11] += len(re.findall(r'\/((WDT)|(WP)|(WP$)|(WRB)) ', comment)) #number of wh- words
     feats[12] += len(re.findall(slangPat, comment)) #find slang acronyms
     feats[13] += len(re.findall(r' ([A-Z]{3,})\/', comment)) #find all capped words >= 3 letters long
-    feats[14] += (len(re.findall(r' ', comment)) + 1)/float(len(re.findall(r'/.', comment))) # avg number of tokens per sentence
-    feats[15] += (len(''.join(re.findall(r'\b[0-z]+\/', comment))) - 1)/float(len(re.findall(r'\b[0-z]+\/', comment))) #avg len of tokens
+    
+    if len(re.findall(r'/.', comment)):
+        feats[14] += (len(re.findall(r' ', comment)) + 1)/float(len(re.findall(r'/.', comment))) # avg number of tokens per sentence
+    if len(re.findall(r'\b[0-z]+\/', comment)):
+        feats[15] += (len(''.join(re.findall(r'\b[0-z]+\/', comment))) - 1)/float(len(re.findall(r'\b[0-z]+\/', comment))) #avg len of tokens
+    else:
+        feats[15] = 0
+        
     feats[16] += len(re.findall(r'/.', comment)) #Number of sentences
 
     words = [word.strip('/') for word in re.findall(r'\w+\/', comment)]
-    feats[17] = sum([BNGL[word]['AoA'] for word in words if word in BNGL.keys()])/float(len(words))
-    feats[18] = sum([BNGL[word]['IMG'] for word in words if word in BNGL.keys()])/float(len(words))
-    feats[19] = sum([BNGL[word]['FAM'] for word in words if word in BNGL.keys()])/float(len(words))
-
-    feats[20] = math.sqrt(sum([(BNGL[word]['AoA'] - feats[17])**2 for word in words if word in BNGL.keys()])/float(len(words)))
-    feats[21] = math.sqrt(sum([(BNGL[word]['IMG'] - feats[18])**2  for word in words if word in BNGL.keys()])/float(len(words)))
-    feats[22] = math.sqrt(sum([(BNGL[word]['FAM'] - feats[19])**2  for word in words if word in BNGL.keys()])/float(len(words)))
     
-    feats[23] = sum([Warr[word]['V.Mean.Sum'] for word in words if word in Warr.keys()])/float(len(words))
-    feats[24] = sum([Warr[word]['A.Mean.Sum'] for word in words if word in Warr.keys()])/float(len(words))
-    feats[25] = sum([Warr[word]['D.Mean.Sum'] for word in words if word in Warr.keys()])/float(len(words))
+    if len(words):
+        feats[17] = sum([BNGL[word]['AoA'] for word in words if word in BNGL.keys()])/float(len(words))
+        feats[18] = sum([BNGL[word]['IMG'] for word in words if word in BNGL.keys()])/float(len(words))
+        feats[19] = sum([BNGL[word]['FAM'] for word in words if word in BNGL.keys()])/float(len(words))
+        
+        feats[23] = sum([Warr[word]['V.Mean.Sum'] for word in words if word in Warr.keys()])/float(len(words))
+        feats[24] = sum([Warr[word]['A.Mean.Sum'] for word in words if word in Warr.keys()])/float(len(words))
+        feats[25] = sum([Warr[word]['D.Mean.Sum'] for word in words if word in Warr.keys()])/float(len(words))
+    else:
+        feats[17:20] = [0]*3
+        feats[23:26] = [0]*3
+    if len(words)>1:
+        feats[20] = math.sqrt(sum([(BNGL[word]['AoA'] - feats[17])**2 for word in words if word in BNGL.keys()])/float(len(words)-1))
+        feats[21] = math.sqrt(sum([(BNGL[word]['IMG'] - feats[18])**2  for word in words if word in BNGL.keys()])/float(len(words)-1))
+        feats[22] = math.sqrt(sum([(BNGL[word]['FAM'] - feats[19])**2  for word in words if word in BNGL.keys()])/float(len(words)-1))
 
-    feats[26] = math.sqrt(sum([(Warr[word]['V.Mean.Sum'] - feats[17])**2 for word in words if word in Warr.keys()])/float(len(words)))
-    feats[27] = math.sqrt(sum([(Warr[word]['A.Mean.Sum'] - feats[18])**2  for word in words if word in Warr.keys()])/float(len(words)))
-    feats[28] = math.sqrt(sum([(Warr[word]['D.Mean.Sum'] - feats[19])**2  for word in words if word in Warr.keys()])/float(len(words)))  
-
+        feats[26] = math.sqrt(sum([(Warr[word]['V.Mean.Sum'] - feats[17])**2 for word in words if word in Warr.keys()])/float(len(words)-1))
+        feats[27] = math.sqrt(sum([(Warr[word]['A.Mean.Sum'] - feats[18])**2  for word in words if word in Warr.keys()])/float(len(words)-1))
+        feats[28] = math.sqrt(sum([(Warr[word]['D.Mean.Sum'] - feats[19])**2  for word in words if word in Warr.keys()])/float(len(words)-1)) 
+        
+    else:
+        feats[20:23] = [0]*3
+        feats[26:29] = [0]*3
     # TODO: your code here
     return feats
 def main( args ):

@@ -5,6 +5,7 @@ import json
 import re
 import html
 
+import timeit
 import spacy
 nlp = spacy.load('en', disable=['parser', 'ner']) 
 
@@ -165,13 +166,12 @@ def main( args ):
         for file in files:
             fullFile = os.path.join(subdir, file)
             print( "Processing " + fullFile)
-
+            a = timeit.timeit()
             data = json.load(open(fullFile))
 
             
             # TODO: select appropriate args.max lines
             for i in range(int(args.ID[0])%int(args.max),int(args.ID[0])%int(args.max) + int(args.max)):
-                print(i)
                 line = data[i]
                 # TODO: read those lines with something like `j = json.loads(line)`
                 j = json.loads(line)
@@ -187,6 +187,8 @@ def main( args ):
                 
                 # TODO: append the result to 'allOutput'
                 allOutput.append(j)
+            b = timeit.timeit()
+            print("Finished processing after: " + str(b-a))
     fout = open(args.output, 'w')
     fout.write(json.dumps(allOutput))
     fout.close()
