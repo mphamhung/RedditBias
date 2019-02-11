@@ -1,1 +1,2 @@
 0.37475,0.407375,0.4125,0.415375,0.4215
+Accuracy increases as the amount of data increases. This is most likely due to having more information for modeling the classifiers. The accuracy is expected to increase to some point and then decrease due to the models overgeneralizing to the data. In our tests we see that with each step of data size the increase of accuracy decreases showing that the accuracy is about to peak. If we had more data we would probably see the downward trend. 

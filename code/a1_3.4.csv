@@ -3,4 +3,5 @@
 0.269875,0.25975,0.39725,0.368625,0.4225
 0.27725,0.245,0.412125,0.3805,0.428125
 0.261125,0.249125,0.40725,0.40025,0.4295
-"Ttest_relResult(statistic=-37.83198730033257, pvalue=2.9153750450225413e-06)","Ttest_relResult(statistic=-37.69160645530412, pvalue=2.958948491552444e-06)","Ttest_relResult(statistic=-9.876821986614896, pvalue=0.0005896179066879344)","Ttest_relResult(statistic=-4.725718732226053, pvalue=0.009132911351033434)"
+2.9153750450225413e-06,2.958948491552444e-06,0.0005896179066879344,0.009132911351033434
+The p-values were extremely small. Less than 0.05 indicating that the accuracies were significantly different and were not the result of poor sampling. This indicates that Ada Boost is the best model of the bunch.
